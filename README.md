@@ -5,7 +5,7 @@ Deep learning models includes :
 - Recurrent Neural Networks (RNNs)
 
 In this sample, we will develope, evalue and make predictions with MLP for Iris flowers multiclass classsification
-This problem involves predicting the species of iris flower given measures of the flower.
+This problem involves predicting the species of iris flower given measures of the flower.</br>
 ![irisFlower](https://user-images.githubusercontent.com/73010204/135714519-7280d369-fd3d-4c2e-85fc-58b452feffce.jpg)
 
 ## Dataset:

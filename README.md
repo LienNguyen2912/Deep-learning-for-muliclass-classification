@@ -22,18 +22,17 @@ The features/variables are:
 
 We will explore the data by using libraries later.
 ## Import Libraries and Load Dataset
-We need to import some libraries: pandas (loading dataset), numpy (matrix manipulation), matplotlib and seaborn (visualization), and sklearn (building classifiers) and keras for modeling.
+We need to import some libraries: pandas (loading dataset), numpy (matrix manipulation), matplotlib and seaborn (visualization), and sklearn (preprocessing) and keras for modeling.
 ```sh
 from numpy import argmax
 from pandas import read_csv
-from pandas.core.algorithms import mode
 from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense
 import numpy as np
+import seaborn as sns
 from matplotlib import pyplot
-from tensorflow.python.keras.engine import input_layer
 ```
 Then just load the dataset by pandas
 ```sh

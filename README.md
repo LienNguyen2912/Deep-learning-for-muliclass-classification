@@ -190,7 +190,54 @@ print('acc_test_set = %.3f' %(acc_test))
 ```
 > Predicted: [[4.5509735e-04 1.5763266e-01 8.4191221e-01]] (class=2)
 > acc_test_set = 0.933
+
 ## Improvement
+**Reduce overfitting by dropout or slowing down the learning process**</br>
+For example, the parameter of Dropout() is 0.4 means 40 percent of inputs will be dropped each update to the model.
+```sh
+# Define the model
+n_features = X_train.shape[1]
+model = Sequential()
+model.add(Dense(10, activation='relu', kernel_initializer='he_normal', input_shape=(n_features,)))
+model.add(Dropout(0.5))
+model.add(Dense(8, activation='relu', kernel_initializer='he_normal'))
+model.add(Dropout(0.5))
+model.add(Dense(3, activation='softmax'))
+lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(initial_learning_rate=1e-2,decay_steps=100000,decay_rate=0.96)
+optimizer=tf.keras.optimizers.Adam(learning_rate=lr_schedule)
+
+# Compile the model
+model.compile(optimizer=optimizer, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+```
+> loss_train = 0.11177, acc_train = 0.975</br>
+> loss_dev = 0.13051, acc_dev = 0.933</br>
+> Predicted: [[0.9434247  0.05517707 0.0013982 ]] (class=0)</br>
+> acc_test_set = 0.933
+
+**Halt Training at the Right Time With Early Stopping**</br>
+There is trade off between underfit and overfit. That's why select _epochs_ is challenge. One approach to solving this problem is to use early stopping. 
+```sh
+# Define the model
+n_features = X_train.shape[1]
+model = Sequential()
+model.add(Dense(10, activation='relu', kernel_initializer='he_normal', input_shape=(n_features,)))
+model.add(Dense(8, activation='relu', kernel_initializer='he_normal'))
+model.add(Dense(3, activation='softmax'))
+
+# Compile the model
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+# Fit the model
+es = EarlyStopping(monitor='val_loss', patience=5)
+history = model.fit(x = X_train, y = y_train, batch_size=32, epochs=200, verbose=0, validation_data=(X_dev, y_dev),  callbacks=[es])
+```
+> loss_train = 0.09131, acc_train = 0.967</br>
+> loss_dev = 0.23423, acc_dev = 0.933</br>
+> Predicted: [[0.08655152 0.07805268 0.83539575]] (class=2)</br>
+> acc_test_set = 0.933
+
+# Summary
+We have completed implementing MLP for Iris flowers multiclass classsification.
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 [data1]: <https://raw.githubusercontent.com/jbrownlee/Datasets/master/iris.csv>

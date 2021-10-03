@@ -5,6 +5,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense
+from tensorflow.keras.callbacks import EarlyStopping
 import numpy as np
 import seaborn as sns
 from matplotlib import pyplot
@@ -85,7 +86,8 @@ model.add(Dense(3, activation='softmax'))
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
 # Fit the model
-history = model.fit(x = X_train, y = y_train, batch_size=32, epochs=150, verbose=0, validation_data=(X_dev, y_dev))
+es = EarlyStopping(monitor='val_loss', patience=5)
+history = model.fit(x = X_train, y = y_train, batch_size=32, epochs=200, verbose=0, validation_data=(X_dev, y_dev),  callbacks=[es])
 
 # Evaluate the model
 loss_train, acc_train = model.evaluate(X_train, y_train, verbose = 0)

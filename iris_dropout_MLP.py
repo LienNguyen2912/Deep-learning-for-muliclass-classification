@@ -5,6 +5,8 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Dropout
+import tensorflow as tf
 import numpy as np
 import seaborn as sns
 from matplotlib import pyplot
@@ -78,11 +80,15 @@ print('X_train.shape = %s, X_dev.shape = %s, X_test.shape = %s, y_train.shape = 
 n_features = X_train.shape[1]
 model = Sequential()
 model.add(Dense(10, activation='relu', kernel_initializer='he_normal', input_shape=(n_features,)))
+model.add(Dropout(0.5))
 model.add(Dense(8, activation='relu', kernel_initializer='he_normal'))
+model.add(Dropout(0.5))
 model.add(Dense(3, activation='softmax'))
+lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(initial_learning_rate=1e-2,decay_steps=100000,decay_rate=0.96)
+optimizer=tf.keras.optimizers.Adam(learning_rate=lr_schedule)
 
 # Compile the model
-model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer=optimizer, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
 # Fit the model
 history = model.fit(x = X_train, y = y_train, batch_size=32, epochs=150, verbose=0, validation_data=(X_dev, y_dev))
